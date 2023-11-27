@@ -1,0 +1,17 @@
+{
+  "name": "personal-web",
+  "version": "1.0.0",
+  "description": "this is my personal web in dumbways",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Amira nabila",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

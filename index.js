@@ -1,32 +1,99 @@
 const { defaultMaxListeners } = require('events')
 const express = require ('express')
+const req = require("express/lib/request");
+const res = require("express/lib/response");
 const path = require('path')
 const app = express()
 const port = 5000
 
 app.set("view engine", "hbs")
 app.set("views", path.join(__dirname,'views'))
-app.use(express.static('asset'))
+app.use(express.static('asset')) 
+app.use(express.urlencoded({ extended: false }));
 
 app.get('/',home )
 app.get('/contact', contact)
-app.get('/add-myproject', addmyproject)
-app.get('/detail', detail)
+app.post('/add-myproject', addmyproject)
+app.get('/add-myproject', addmyprojectView)
+app.post('/delete-myproject/:id', deleteProject)
+
+app.get('/update-project/:id', updateProjectview)
+app.post('/update-project', updateProject)
+
+app.get('/detail-project/:id', detailproject)
+// app.get('/detail', detail)
 
 
-  
+const data=[]
 function home(req, res) {
-    res.render('index')
+    res.render('index',{data})
 }
 function contact (req, res) {
     res.render('contact-me')
 }
-function addmyproject (req, res) {
+function addmyprojectView (req, res) {
     res.render('add-myproject')
 }
-function detail (req, res) {
-    res.render('detail')
-}
+function addmyproject(req, res) {
+    const { name, startDate, endDate, description } = req.body;
+  
+    console.log("Nama Project :", name);
+    console.log("Tanggal Mulai : ", startDate);
+    console.log("Tanggal Selesai : ", endDate);
+    console.log("Deskripsi : ", description);
+  
+    const dataProject = { name, startDate, endDate, description };
+  
+    data.unshift(dataProject);
+  
+    res.redirect("/");
+  }
+  
+  function deleteProject(req, res) {
+    const { id } = req.params;
+    data.splice(id, 1);
+  
+    res.redirect("/");
+  }
+  
+  function updateProjectview(req, res) {
+    const { id } = req.params
+    const dataFilter = data[parseInt(id)]
+    dataFilter.id = parseInt(id)
+    res.render("update-project", { data: dataFilter })
+  }
+  
+  function updateProject(req, res) {
+    const { id, name, startDate, endDate, description } = req.body;
+  
+    // console.log("Nama Project :", name);
+    // console.log("Tanggal Mulai : ", startDate);
+    // console.log("Tanggal Selesai : ", endDate);
+    // console.log("Deskripsi : ", description);
+  
+    // const dataProject = { id, name, startDate, endDate, description };
+  
+    // data.unshift(dataProject);
+  
+    data[parseInt(id)] = {
+      name,
+      startDate,
+      endDate,
+      description,
+    };
+  
+    res.redirect("/");
+  }
+  
+  function detailproject(req, res) {
+    const { id } = req.params;
+    const dataFilter = data[parseInt(id)];
+    dataFilter.id = parseInt(id);
+    res.render("detail-project", { data: dataFilter });
+  }
+// function detail (req, res) {
+//     res.render('detail')
+// }
 // function testimonials(req, res){
 //     res.json(
 //         [

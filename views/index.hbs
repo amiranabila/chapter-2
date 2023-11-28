@@ -122,6 +122,43 @@
           </div>
         </div>
         
+        <div id="content">
+      <div class="row mx-auto" style="max-width: 1000px">
+        {{#each data}}
+          <div class="col-md-4">
+            <div class="container d-flex justify-content-center my-5">
+              <div class="card" style="width: 18rem;">
+                <img src="/img/dumbways.png" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="card-title"><a
+                      href="/detail-project/{{@index}}"
+                    >{{this.name}}</a></h5>
+                  <h6 class="card-text">{{this.startDate}}
+                    |
+                    {{this.endDate}}</h6>
+                  <p class="card-text">{{this.description}}</p>
+                  <form
+                    action="/delete-myProject/{{@index}}"
+                    method="post"
+                    style="text-align: center;"
+                  >
+                    <a
+                      style="width: 7.5rem;"
+                      class="btn btn-secondary"
+                      href="update-project/{{@index}}"
+                    >Edit</a>
+                    <button
+                      class="btn btn-danger"
+                      style="width: 7.5rem;"
+                    >Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
       
     
 

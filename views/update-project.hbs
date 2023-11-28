@@ -47,20 +47,20 @@
               </div>
         <div class="mx-auto p-2" style="width: 600px;">      
           <div class="mb-3">
+            <input type="hidden" name="id" id="" value="{{data.id}}">
             <label  class="form-label">Project Name</label>
             <input type="text"class="form-control" name="name" value="{{data.name}}">
           </div>
         <div style="display: flex; gap: 10px;" >
           <div class="mb-3" style="display: flex; flex-direction: column;">
             <label  class="form-label">Start Date</label>
-            <input type="date"class="form-control" name="startDate">
+            <input type="date"class="form-control" name="startDate" value="{{data.startDate}}">
           </div>
           <div class="mb-3" style="display: flex; flex-direction: column;">
             <label  class="form-label">End Date</label>
-            <input type="date"class="form-control" name="endDate">
+            <input type="date"class="form-control" name="endDate" value="{{data.endDate}}">
           </div>
         </div>
-        
           <div class="mb-3">
             <label  class="form-label">Description</label>
             <textarea class="form-control" placeholder="Description" name="description" >{{data.description}}</textarea>
@@ -108,7 +108,7 @@
             <input type="file"class="form-control" id="inputFile">
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button   class="btn btn-dark"  >Update</button>
+            <button  class="btn btn-dark"  >Update</button>
           </div>
           
         </div>

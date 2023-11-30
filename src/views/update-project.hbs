@@ -33,8 +33,13 @@
               </li>
               
             </ul>
-            <form class="d-flex" role="search">
-              
+            <form class="d-flex" role="search" style="gap: 10px;">
+                {{#if isLogin}}
+                  <h1>Welcome {{user.name}}</h1>
+                {{else}}
+                  <a href="/login">Login</a>
+                  <a href="/register">Register</a>
+                {{/if}}
                 <button type="button" class="btn btn-dark"><a href="/contact" style="color: white; text-decoration: none;">Contact Me</a></button>
             </form>
           </div>

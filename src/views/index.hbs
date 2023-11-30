@@ -37,14 +37,27 @@
               </li>
               
             </ul>
-            <form class="d-flex" role="search">
-              
+            <form class="d-flex" role="search" style="gap: 10px;">
+                {{#if isLogin}}
+                  <h1>Welcome {{user.name}}</h1>
+                {{else}}
+                  <a href="/login">Login</a>
+                  <a href="/register">Register</a>
+                {{/if}}
                 <button type="button" class="btn btn-dark"><a href="/contact" style="color: white; text-decoration: none;">Contact Me</a></button>
             </form>
           </div>
         </div>
       </nav>
+      {{#if messages.success}}
+      <div class="alert alert-success" role="alert">
+        <div class="container">
+         {{messages.success}}
+        </div>
+      </div> 
+      {{/if}}
       <div class="grid gap-0 row-gap-xl-5" >
+        
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
         <div
           class="card my-3 mx-auto px-5 py-5"
@@ -54,6 +67,7 @@
               0 3px 10px 0 rgba(0, 0, 0, 0.19);
           "
         >
+    
           <div class="row g-0" style="display: flex; justify-content: space-around">
             <div class="col-md-8" style="width: 500px">
               <div class="card-body">

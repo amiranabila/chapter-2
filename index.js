@@ -12,10 +12,12 @@ const sequelize = new Sequelize(config.development)
 const bcrypt = require ('bcrypt')
 const session = require('express-session')
 const flash = require('express-flash')
+const upload = require('./src/middlewares/uploadFile')
 
 app.set("view engine", "hbs")
 app.set("views", path.join(__dirname,'src/views'))
 app.use(express.static('src/asset')) 
+app.use("/uploads",express.static(path.join(__dirname,'src/uploads'))) 
 app.use(express.urlencoded({ extended: false }));
 app.use(flash())
 app.use(session ({
@@ -28,18 +30,23 @@ app.use(session ({
     maxAge : 1000 * 60 * 60 * 24
   }
 }))
+
+app.use((req,res,next) => {
+  res.locals.user = req.session.user
+  next()
+})
 app.get('/', home )
 app.get('/register', registerView)
 app.post('/register', register)
 app.get('/login', loginView)
 app.post('/login', login)
 app.get('/contact', contact)
-app.post('/add-myproject', addmyproject)
+app.post('/add-myproject', upload.single("image"), addmyproject)
 app.get('/add-myproject', addmyprojectView)
 app.post('/delete-myproject/:id', deleteProject)
 
 app.get('/update-project/:id', updateProjectview)
-app.post('/update-project', updateProject)
+app.post('/update-project',upload.single("image"), updateProject)
 
 app.get('/detail-project/:id', detailproject)
 // app.get('/detail', detail)
@@ -105,6 +112,7 @@ async function login (req, res) {
     req.session.isLogin = true
     req.flash('success', 'login success!')
     req.session.user = {
+      id: obj[0].id,
       name: obj[0].name,
       email: obj[0].email
     }
@@ -116,15 +124,21 @@ function contact (req, res) {
     const user = req.session.user
     res.render('contact-me', {data, isLogin, user})
 }
-function addmyprojectView (req, res) {
+async function addmyprojectView (req, res) {
+    const query = `SELECT projects.id, projects.name, projects.description, projects.image,projects.technologies,
+    users.name AS author, projects."createdAt", projects."updatedAt" FROM projects LEFT JOIN users ON
+    projects."authorId" = users.id`
+    const obj = await sequelize.query(query, {type: QueryTypes.SELECT})
+    console.log("data project", obj)
     const isLogin = req.session.isLogin
     const user = req.session.user
-    res.render('add-myproject', {data, isLogin, user})
+    res.render('add-myproject', {data: obj, isLogin, user})
 }
 async function addmyproject(req, res) {
 
-    const { name, startDate, endDate, description } = req.body;
-    const image = "dumbways.png"
+    const { name, startDate, endDate, description, technologies } = req.body;
+    const authorId = req.session.user.id
+    const image = req.file.filename
   
     // console.log("Nama Project :", name);
     // console.log("Tanggal Mulai : ", startDate);
@@ -134,7 +148,7 @@ async function addmyproject(req, res) {
     // const dataProject = { name, startDate, endDate, description };
   
     // data.unshift(dataProject);
-    const query = `INSERT INTO projects (name, start_date, end_date, image, description) VALUES ('${name}', '${startDate}', '${endDate}', '${image}', '${description}')`
+    const query = `INSERT INTO projects (name, start_date, end_date, image, description, technologies, "authorId") VALUES ('${name}', '${startDate}', '${endDate}', '${image}', '${description}',ARRAY['${technologies}'], '${authorId}')`
     const obj = await sequelize.query(query, { type: QueryTypes.INSERT })
 
     console.log("data berhasil di insert", obj)
@@ -165,7 +179,17 @@ async function addmyproject(req, res) {
   }
   
   async function updateProject(req, res) {
-    const { id, name, startDate, endDate, description } = req.body;
+    const { id, name, startDate, endDate, description, technologies } = req.body;
+    let image=""
+    if (req.file) {
+      image = req.file.filename;
+    }
+    if (!image) {
+      const query = `SELECT projects.id, projects.name, start_date, end_date, description, technologies,
+      image, "authorId",users.name AS author, projects."createdAt", projects."updatedAt" FROM projects LEFT JOIN users ON projects."authorId" = users.id WHERE projects.id=${id}`;
+      const obj = await sequelize.query(query, { type: QueryTypes.SELECT });
+      image = obj[0].image;
+    }
   
     
     // data[parseInt(id)] = {
@@ -174,7 +198,7 @@ async function addmyproject(req, res) {
     //   endDate,
     //   description,
     // };
-    const query = `UPDATE projects SET name='${name}', start_date='${startDate}', end_date='${endDate}', description='${description}' WHERE id=${id}`
+    const query = `UPDATE projects SET name='${name}', start_date='${startDate}', end_date='${endDate}', description='${description}', technologies= ARRAY['${technologies}'], image='${image}' WHERE id=${id}`
     const obj = await sequelize.query(query, {type:QueryTypes.UPDATE})
     console.log("blog berhasil diupdate", obj)
   
@@ -183,7 +207,9 @@ async function addmyproject(req, res) {
   
  async function detailproject(req, res) {
     const { id } = req.params;
-    const query = `SELECT * FROM projects WHERE id=${id}`
+    const query = `SELECT projects.id, projects.name, projects.description, projects.image,
+    users.name AS author, projects."createdAt", projects."updatedAt" FROM projects LEFT JOIN users ON
+    projects."authorId" = users.id WHERE projects.id=${id}`
     const obj = await sequelize.query(query, {type:QueryTypes.SELECT})
     const isLogin = req.session.isLogin
     const user = req.session.user

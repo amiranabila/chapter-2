@@ -142,7 +142,7 @@
           <div class="col-md-4">
             <div class="container d-flex justify-content-center my-5">
               <div class="card" style="width: 18rem;">
-                <img src="/img/{{this.image}}" class="card-img-top" alt="..." />
+                <img src="/uploads/{{this.image}}" class="card-img-top" alt="..." />
                 <div class="card-body">
                   <h5 class="card-title">
                     <a
@@ -151,7 +151,8 @@
                     </h5>
                   <h6 class="card-text">{{this.start_date}}
                     |
-                    {{this.end_date}}</h6>
+                    {{this.end_date}} |{{this.author}}</h6>
+                    <p class="card-text">{{this.technologies}}</p>
                   <p class="card-text">{{this.description}}</p>
                   <form
                     action="/delete-myProject/{{this.id}}"

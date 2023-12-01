@@ -45,7 +45,7 @@
           </div>
         </div>
       </nav>
-       <form method="post" action="/update-project">
+       <form method="post" action="/update-project" enctype="multipart/form-data">
         <fieldset >
             <div class="mx-auto p-2" style="width: 400px;">
                <h3 style="font-weight: bold;">Update MY PROJECT</h3> 
@@ -77,13 +77,13 @@
                 <div style="display: flex; flex-direction: column;">
                     <div class="input-group mb-3" style="gap: 10px;">
                         <div class="input-group-text">
-                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="nodeJs">
+                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="nodeJs" name="technologies">
                         </div>
                         <label  class="form-label">Node Js</label>
                     </div>
                     <div class="input-group mb-3" style="gap: 10px;">
                         <div class="input-group-text">
-                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="reactJs">
+                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="reactJs" name="technologies">
                         </div>
                         <label  class="form-label">React Js</label>
                     </div>
@@ -92,13 +92,13 @@
                    <div style="display: flex; flex-direction: column;">
                     <div class="input-group mb-3" style="gap: 10px;">
                         <div class="input-group-text">
-                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="nextJs">
+                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="nextJs" name="technologies">
                         </div>
                         <label  class="form-label">Next Js</label>
                     </div>
                     <div class="input-group mb-3" style="gap: 10px;">
                         <div class="input-group-text">
-                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="typeScript">
+                          <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" id="typeScript" name="technologies">
                         </div>
                         <label  class="form-label">TypeScript</label>
                     </div>
@@ -110,7 +110,7 @@
         </div> 
         <div class="mb-3">
             <label  class="form-label">Upload Image</label>
-            <input type="file"class="form-control" id="inputFile">
+            <input type="file"class="form-control" id="inputFile" name="image">
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button  class="btn btn-dark"  >Update</button>
